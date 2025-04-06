@@ -1,0 +1,48 @@
+name: todo_list_app
+description: "A new Flutter project."
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+#==================================  Dependencies  Section  =========================
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_launcher_icons: ^0.13.1
+
+#==================================  Dev Dependencies  Section  ====================
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  min_sdk_android: 24
+  adaptive_icon_background: "#ffe4e2dd"
+  adaptive_icon_foreground: "assets/icons/app_icon.png"
+
+#==================================  Flutter  Section  ==============================
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-Regular.ttf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+    - family: Saira
+      fonts:
+        - asset: assets/fonts/Saira_Condensed-Regular.ttf
