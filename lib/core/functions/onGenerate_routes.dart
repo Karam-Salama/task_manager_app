@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../../modules/add_item/ui/screens/add_item_screen.dart';
-import '../../modules/home/screens/home_screen.dart';
+import '../../modules/home/ui/screens/home_screen.dart';
 import '../../modules/splash/screens/splash_screen.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {

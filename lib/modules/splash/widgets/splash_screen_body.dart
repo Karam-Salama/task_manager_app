@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:todo_list_app/modules/home/screens/home_screen.dart';
+import 'package:todo_list_app/modules/home/ui/screens/home_screen.dart';
 
 import '../../../core/functions/navigation.dart';
 import '../../../core/utils/app_assets.dart';
