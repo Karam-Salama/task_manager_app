@@ -6,7 +6,7 @@ import 'app_colors.dart'; // Import this for TextStyle
 
 abstract class AppTextStyle {
   static final pacifico700style23Black = const TextStyle(
-    fontFamily: 'Pacifico',
+    fontFamily: 'Saira',
     fontWeight: FontWeight.w700,
     fontSize: 23,
     color: AppColors.blackColor,

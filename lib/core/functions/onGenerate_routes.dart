@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../modules/home/home_screen.dart';
-import '../../modules/splash/splash_screen.dart';
+import '../../modules/add_item/ui/screens/add_item_screen.dart';
+import '../../modules/home/screens/home_screen.dart';
+import '../../modules/splash/screens/splash_screen.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -11,6 +12,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const SplashScreen());
     case HomeScreen.routeName:
       return MaterialPageRoute(builder: (context) => const HomeScreen());
+    case AddItemScreen.routeName:
+      return MaterialPageRoute(builder: (context) => const AddItemScreen());
     default:
       return MaterialPageRoute(builder: (context) => const Scaffold());
   }

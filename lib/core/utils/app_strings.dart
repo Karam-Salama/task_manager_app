@@ -17,4 +17,11 @@ abstract class AppStrings {
   static const String doneTasks = "Done Tasks";
   // Archived Tasks
   static const String archivedTasks = "Archived Tasks";
+
+  static const String taskTitle = "Task Title";
+  static const String taskDescription = "Task Description";
+  static const String taskDate = "Task Date";
+  static const String taskTime = "Task Time";
+
+  static const String addTask = "Add Task";
 }

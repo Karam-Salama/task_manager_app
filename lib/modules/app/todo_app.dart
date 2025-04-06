@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/functions/onGenerate_routes.dart';
 import '../../core/utils/app_colors.dart';
-import '../splash/splash_screen.dart';
+import '../splash/screens/splash_screen.dart';
 
 class TodoApp extends StatelessWidget {
   const TodoApp({super.key});
