@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_list_app/modules/add_item/ui/cubit/add_item_cubit.dart';
-
+import 'package:todo_list_app/modules/add_item/ui/cubit/tasks_cubit.dart';
 import '../../../../core/functions/validation.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/app_text_styles.dart';
 import '../../../../core/widgets/custom_btn.dart';
-import '../cubit/add_item_state.dart';
+import '../cubit/tasks_state.dart';
 import 'cutom_text_form_field_widget_.dart';
 
 class CustomAddingItemForm extends StatefulWidget {
@@ -20,28 +19,76 @@ class CustomAddingItemForm extends StatefulWidget {
 class _CustomAddingItemFormState extends State<CustomAddingItemForm> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AddItemCubit, AddItemState>(
-      listener: (context, state) {},
+    return BlocConsumer<TasksCubit, TasksStates>(
+      listener: (context, state) {
+        if (state is AddItemSuccessState) {
+          context.read<TasksCubit>().loadTasks();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Added Successfully"),
+              backgroundColor: AppColors.primaryColor,
+            ),
+          );
+
+          Navigator.pop(context);
+        } else if (state is AddItemErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Can't Add Item"),
+              backgroundColor: AppColors.redColor,
+            ),
+          );
+        }
+      },
       builder: (context, state) {
-        AddItemCubit addItemCubit = BlocProvider.of<AddItemCubit>(context);
+        TasksCubit addItemCubit = BlocProvider.of<TasksCubit>(context);
         return Form(
           key: addItemCubit.addItemFormKey,
           autovalidateMode: addItemCubit.addItemAutoValidateMode,
           child: Column(
             children: [
               CustomTextFormField(
+                controller: addItemCubit.titleController,
                 hintText: AppStrings.taskTitle,
                 keyboardType: TextInputType.text,
-                onChanged: (title) {},
                 validator: Validation.validateTaskTitle,
+                onChanged: (title) {
+                  addItemCubit.titleController.text = title;
+                },
               ),
               const SizedBox(height: 16),
               CustomTextFormField(
+                controller: addItemCubit.descriptionController,
                 hintText: AppStrings.taskDescription,
                 keyboardType: TextInputType.text,
                 maxLines: 3,
-                onChanged: (description) {},
                 validator: Validation.validateTaskDescription,
+                onChanged: (description) {
+                  addItemCubit.descriptionController.text = description;
+                },
+              ),
+              const SizedBox(height: 16),
+              CustomTextFormField(
+                controller: addItemCubit.dateController,
+                hintText: AppStrings.taskDate,
+                readOnly: true,
+                keyboardType: TextInputType.datetime,
+                validator: Validation.validateTaskDate,
+                onTap: () {
+                  addItemCubit.selectDate(context);
+                },
+              ),
+              const SizedBox(height: 16),
+              CustomTextFormField(
+                controller: addItemCubit.timeController,
+                hintText: AppStrings.taskTime,
+                readOnly: true,
+                keyboardType: TextInputType.datetime,
+                validator: Validation.validateTaskTime,
+                onTap: () {
+                  addItemCubit.selectTime(context);
+                },
               ),
               const SizedBox(height: 33),
               state is AddItemLoadingState
@@ -59,11 +106,13 @@ class _CustomAddingItemFormState extends State<CustomAddingItemForm> {
                         if (addItemCubit.addItemFormKey.currentState!
                             .validate()) {
                           addItemCubit.addItemFormKey.currentState!.save();
-                          // addItemCubit.addItemToFirebase(
-                          //   context: context,
-                          //   title: addItemCubit.title,
-                          //   description: addItemCubit.description,
-                          // );
+                          addItemCubit.addItemToDatabase(
+                            context,
+                            addItemCubit.titleController.text,
+                            addItemCubit.descriptionController.text,
+                            addItemCubit.dateController.text,
+                            addItemCubit.timeController.text,
+                          );
                         } else {
                           setState(() {
                             addItemCubit.addItemAutoValidateMode =
@@ -71,7 +120,7 @@ class _CustomAddingItemFormState extends State<CustomAddingItemForm> {
                           });
                         }
                       },
-                    )
+                    ),
             ],
           ),
         );

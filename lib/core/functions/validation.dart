@@ -14,4 +14,18 @@ class Validation {
     }
     return null;
   }
+
+  static String? validateTaskDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select a task date';
+    }
+    return null;
+  }
+
+  static String? validateTaskTime(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select a task time';
+    }
+    return null;
+  }
 }
