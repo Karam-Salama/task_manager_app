@@ -65,4 +65,36 @@ class TasksCubit extends Cubit<TasksStates> {
       emit(DisplayTasksErrorState(e.toString()));
     }
   }
+
+  Future<void> deleteTask(int id) async {
+    try {
+      await DatabaseHelper().deleteTask(id);
+      emit(DisplayTasksLoadingState());
+      await loadTasks();
+    } catch (e) {
+      emit(DisplayTasksErrorState(e.toString()));
+    }
+  }
+
+  void updateTaskInDatabase(
+    BuildContext context,
+    int id,
+    String title,
+    String description,
+    String date,
+    String time,
+  ) async {
+    try {
+      final task = {
+        'title': title,
+        'description': description,
+        'date': date,
+        'time': time,
+      };
+      await DatabaseHelper().updateTask(task, id);
+      emit(AddItemSuccessState());
+    } catch (e) {
+      emit(AddItemErrorState(e.toString()));
+    }
+  }
 }

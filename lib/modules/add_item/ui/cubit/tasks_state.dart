@@ -26,3 +26,15 @@ class DisplayTasksErrorState extends TasksStates {
 
   DisplayTasksErrorState(this.error);
 }
+
+class DeleteTaskSuccessState extends TasksStates {
+  final String message;
+
+  DeleteTaskSuccessState(this.message);
+}
+
+class DeleteTaskErrorState extends TasksStates {
+  final String error;
+
+  DeleteTaskErrorState(this.error);
+}

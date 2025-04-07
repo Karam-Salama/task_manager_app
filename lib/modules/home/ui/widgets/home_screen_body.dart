@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list_app/modules/add_item/ui/cubit/tasks_state.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../add_item/ui/cubit/tasks_cubit.dart';
+import 'custom_task_item_widget.dart';
 
 class HomeScreenBody extends StatelessWidget {
   const HomeScreenBody({super.key});
@@ -36,9 +37,12 @@ class HomeScreenBody extends StatelessWidget {
               itemCount: state.tasks.length,
               itemBuilder: (context, index) {
                 final task = state.tasks[index];
-                return ListTile(
-                  title: Text(task['title']),
-                  subtitle: Text(task['description']),
+                return CustomTaskItemWidget(
+                  id: task['id'],
+                  title: task['title'],
+                  description: task['description'],
+                  date: task['date'],
+                  time: task['time'],
                 );
               },
             );
