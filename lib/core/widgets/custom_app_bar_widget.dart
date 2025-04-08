@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list_app/core/utils/app_text_styles.dart';
 import 'package:todo_list_app/modules/add_item/ui/screens/add_item_screen.dart';
 
-import '../../../core/functions/navigation.dart';
+import '../../modules/add_item/ui/cubit/tasks_cubit.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -28,7 +29,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: const Icon(Icons.add_circle_outline, size: 30),
                 onPressed: () {
-                  customNavigate(context, AddItemScreen.routeName);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        context.read<TasksCubit>().clearControllers();
+                        return const AddItemScreen();
+                      },
+                    ),
+                  );
                 },
               ),
             ]

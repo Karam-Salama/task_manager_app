@@ -7,6 +7,7 @@ import '../../../../core/utils/app_text_styles.dart';
 import '../../../../core/widgets/custom_dialog_widget.dart';
 import '../../../add_item/ui/cubit/tasks_cubit.dart';
 import '../../../add_item/ui/cubit/tasks_state.dart';
+import '../../../add_item/ui/screens/add_item_screen.dart';
 
 class CustomTaskItemWidget extends StatelessWidget {
   const CustomTaskItemWidget({
@@ -108,7 +109,29 @@ class CustomTaskItemWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      tasksCubit.titleController.text = title;
+                      tasksCubit.descriptionController.text = description;
+                      tasksCubit.dateController.text = date;
+                      tasksCubit.timeController.text = time;
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddItemScreen(
+                            task: {
+                              'id': id,
+                              'title': title,
+                              'description': description,
+                              'date': date,
+                              'time': time,
+                            },
+                          ),
+                        ),
+                      ).then((_) {
+                        tasksCubit.loadTasks();
+                      });
+                    },
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all<Color>(
                         AppColors.primaryColor,

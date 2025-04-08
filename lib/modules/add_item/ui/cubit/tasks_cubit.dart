@@ -97,4 +97,11 @@ class TasksCubit extends Cubit<TasksStates> {
       emit(AddItemErrorState(e.toString()));
     }
   }
+
+  void clearControllers() {
+    titleController.clear();
+    descriptionController.clear();
+    dateController.clear();
+    timeController.clear();
+  }
 }
