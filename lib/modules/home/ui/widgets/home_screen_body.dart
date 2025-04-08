@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list_app/modules/add_item/ui/cubit/tasks_state.dart';
-import '../../../../core/utils/app_colors.dart';
 import '../../../add_item/ui/cubit/tasks_cubit.dart';
 import 'custom_task_item_widget.dart';
 
@@ -14,12 +13,6 @@ class HomeScreenBody extends StatelessWidget {
       body: BlocConsumer<TasksCubit, TasksStates>(
         listener: (context, state) {
           if (state is DisplayTasksSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Tasks loaded successfully!'),
-                backgroundColor: AppColors.primaryColor,
-              ),
-            );
           } else if (state is DisplayTasksErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

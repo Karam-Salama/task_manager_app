@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_list_app/core/utils/app_strings.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_text_styles.dart';
+import '../../../../core/widgets/custom_dialog_widget.dart';
 import '../../../add_item/ui/cubit/tasks_cubit.dart';
 import '../../../add_item/ui/cubit/tasks_state.dart';
-import '../../../add_item/ui/screens/add_item_screen.dart';
 
 class CustomTaskItemWidget extends StatelessWidget {
   const CustomTaskItemWidget({
@@ -124,7 +125,7 @@ class CustomTaskItemWidget extends StatelessWidget {
                       visualDensity: VisualDensity.compact,
                     ),
                     child: Text(
-                      'Edit',
+                      AppStrings.edit,
                       style: AppTextStyle.pacifico700style23Black.copyWith(
                         color: AppColors.backgroundColor,
                         fontSize: 16,
@@ -133,7 +134,18 @@ class CustomTaskItemWidget extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      tasksCubit.deleteTask(id);
+                      showDialog(
+                        context: context,
+                        builder: (context) => CustomDialog(
+                          message: AppStrings.deleteTask,
+                          icon: Icons.delete,
+                          textButton: AppStrings.delete,
+                          onpressed: () {
+                            Navigator.of(context).pop();
+                            tasksCubit.deleteTask(id);
+                          },
+                        ),
+                      );
                     },
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all<Color>(
@@ -151,7 +163,7 @@ class CustomTaskItemWidget extends StatelessWidget {
                       visualDensity: VisualDensity.compact,
                     ),
                     child: Text(
-                      'Delete',
+                      AppStrings.delete,
                       style: AppTextStyle.pacifico700style23Black.copyWith(
                         color: AppColors.backgroundColor,
                         fontSize: 16,

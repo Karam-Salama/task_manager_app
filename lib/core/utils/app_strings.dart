@@ -24,4 +24,9 @@ abstract class AppStrings {
   static const String taskTime = "Task Time";
 
   static const String addTask = "Add Task";
+
+  static const String deleteTask = 'Are you sure you want to delete this task?';
+  static const String delete = 'Delete';
+
+  static const String edit = 'Edit';
 }
