@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list_app/modules/add_item/ui/cubit/tasks_state.dart';
+import '../../../../core/utils/app_text_styles.dart';
 import '../../../add_item/ui/cubit/tasks_cubit.dart';
 import 'custom_task_item_widget.dart';
 import 'task_item_shimmer_widget.dart';
@@ -48,7 +49,12 @@ class HomeScreenBody extends StatelessWidget {
           } else if (state is DisplayTasksErrorState) {
             return Center(child: Text('Error: ${state.error}'));
           } else {
-            return const Center(child: Text('No tasks available.'));
+            return Center(
+              child: Text(
+                'No tasks available.',
+                style: AppTextStyle.pacifico700style23Black,
+              ),
+            );
           }
         },
       ),

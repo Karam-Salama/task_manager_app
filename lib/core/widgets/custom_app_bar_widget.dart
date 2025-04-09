@@ -21,7 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(title, style: AppTextStyle.pacifico700style23Black),
-      toolbarHeight: 100,
+      toolbarHeight: 80,
       automaticallyImplyLeading: showLeadingIcon,
       elevation: 0,
       actions: showActions

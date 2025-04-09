@@ -97,10 +97,16 @@ class CustomTaskItemWidget extends StatelessWidget {
 
                         if (scheduledTime.isBefore(DateTime.now())) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text(
-                                  'Cannot schedule notification for past time'),
-                              backgroundColor: Colors.red,
+                                'Cannot schedule notification for past time',
+                                style: AppTextStyle.pacifico700style23Black
+                                    .copyWith(
+                                  color: AppColors.backgroundColor,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              backgroundColor: AppColors.redColor,
                             ),
                           );
                           return;
@@ -116,7 +122,13 @@ class CustomTaskItemWidget extends StatelessWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                                'Notification scheduled Successfully at ${timeFormat.format(scheduledTime)}'),
+                              'Notification scheduled Successfully at ${timeFormat.format(scheduledTime)}',
+                              style:
+                                  AppTextStyle.pacifico700style23Black.copyWith(
+                                color: AppColors.backgroundColor,
+                                fontSize: 14,
+                              ),
+                            ),
                             backgroundColor: AppColors.primaryColor,
                           ),
                         );
