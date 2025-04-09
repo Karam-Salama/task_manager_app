@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_list_app/core/utils/app_strings.dart';
 
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_text_styles.dart';
 import '../../../../core/widgets/custom_dialog_widget.dart';
@@ -64,12 +68,75 @@ class CustomTaskItemWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: AppTextStyle.pacifico700style23Black.copyWith(
-                  color: AppColors.primaryColor,
-                  fontSize: 20,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyle.pacifico700style23Black.copyWith(
+                      color: AppColors.primaryColor,
+                      fontSize: 20,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      try {
+                        final dateFormat = DateFormat('MM/dd/yyyy');
+                        final timeFormat = DateFormat('h:mm a');
+
+                        final parsedDate = dateFormat.parse(date);
+                        final parsedTime = timeFormat.parse(time);
+
+                        final scheduledTime = DateTime(
+                          parsedDate.year,
+                          parsedDate.month,
+                          parsedDate.day,
+                          parsedTime.hour,
+                          parsedTime.minute,
+                        );
+
+                        if (scheduledTime.isBefore(DateTime.now())) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Cannot schedule notification for past time'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+
+                        await NotificationService.scheduleTodoNotification(
+                          id: id,
+                          title: 'Reminder: $title',
+                          description: description,
+                          scheduledTime: scheduledTime,
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Notification scheduled Successfully at ${timeFormat.format(scheduledTime)}'),
+                            backgroundColor: AppColors.primaryColor,
+                          ),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Error Scheduling Notification: ${e.toString()}'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.notifications_active_outlined,
+                      color: AppColors.primaryColor,
+                      size: 30,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               Text(
@@ -114,7 +181,6 @@ class CustomTaskItemWidget extends StatelessWidget {
                       tasksCubit.descriptionController.text = description;
                       tasksCubit.dateController.text = date;
                       tasksCubit.timeController.text = time;
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(

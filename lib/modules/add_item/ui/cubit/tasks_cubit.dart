@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/services/notification_service.dart';
 import '../../data/database_helper.dart';
 import 'tasks_state.dart';
 
@@ -40,6 +41,22 @@ class TasksCubit extends Cubit<TasksStates> {
     }
   }
 
+  DateTime _parseTaskDateTime(String dateStr, String timeStr) {
+    final dateFormat = DateFormat('MM/dd/yyyy');
+    final timeFormat = DateFormat('h:mm a');
+
+    final date = dateFormat.parse(dateStr);
+    final time = timeFormat.parse(timeStr);
+
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+  }
+
   void addItemToDatabase(BuildContext context, String title, String description,
       String date, String time) async {
     try {
@@ -49,8 +66,18 @@ class TasksCubit extends Cubit<TasksStates> {
         'date': date,
         'time': time,
       };
-      await DatabaseHelper().insertTask(task);
+      final id = await DatabaseHelper().insertTask(task);
       emit(AddItemSuccessState());
+
+      final scheduledTime = _parseTaskDateTime(date, time);
+      if (scheduledTime.isAfter(DateTime.now())) {
+        await NotificationService.scheduleTodoNotification(
+          id: id,
+          title: 'Reminder: $title',
+          description: description,
+          scheduledTime: scheduledTime,
+        );
+      }
     } catch (e) {
       emit(AddItemErrorState(e.toString()));
     }
@@ -69,6 +96,7 @@ class TasksCubit extends Cubit<TasksStates> {
   Future<void> deleteTask(int id) async {
     try {
       await DatabaseHelper().deleteTask(id);
+      await NotificationService.cancelNotification(id);
       emit(DisplayTasksLoadingState());
       await loadTasks();
     } catch (e) {
@@ -93,6 +121,18 @@ class TasksCubit extends Cubit<TasksStates> {
       };
       await DatabaseHelper().updateTask(task, id);
       emit(AddItemSuccessState());
+
+      // إلغاء الإشعار القديم وإنشاء جديد
+      await NotificationService.cancelNotification(id);
+      final scheduledTime = _parseTaskDateTime(date, time);
+      if (scheduledTime.isAfter(DateTime.now())) {
+        await NotificationService.scheduleTodoNotification(
+          id: id,
+          title: 'Updated: $title',
+          description: description,
+          scheduledTime: scheduledTime,
+        );
+      }
     } catch (e) {
       emit(AddItemErrorState(e.toString()));
     }

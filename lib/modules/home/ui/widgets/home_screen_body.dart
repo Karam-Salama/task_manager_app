@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_list_app/modules/add_item/ui/cubit/tasks_state.dart';
 import '../../../add_item/ui/cubit/tasks_cubit.dart';
 import 'custom_task_item_widget.dart';
+import 'task_item_shimmer_widget.dart';
 
 class HomeScreenBody extends StatelessWidget {
   const HomeScreenBody({super.key});
@@ -12,8 +13,7 @@ class HomeScreenBody extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<TasksCubit, TasksStates>(
         listener: (context, state) {
-          if (state is DisplayTasksSuccessState) {
-          } else if (state is DisplayTasksErrorState) {
+          if (state is DisplayTasksErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error: ${state.error}'),
@@ -24,8 +24,14 @@ class HomeScreenBody extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is DisplayTasksLoadingState) {
-            return const Center(child: CircularProgressIndicator());
+            return ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) => const TaskItemShimmer(),
+            );
           } else if (state is DisplayTasksSuccessState) {
+            if (state.tasks.isEmpty) {
+              return const Center(child: Text('No tasks available.'));
+            }
             return ListView.builder(
               itemCount: state.tasks.length,
               itemBuilder: (context, index) {
